@@ -1,0 +1,62 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout OODS repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd site
+          npm ci
+
+      - name: Build site
+        run: |
+          cd site
+          npm run build
+
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: Ciang-ks/Ciang-ks.github.io
+          token: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+          path: target-repo
+          fetch-depth: 0
+
+      - name: Deploy to OODS subdirectory
+        run: |
+          # Remove old OODS directory if exists
+          rm -rf target-repo/OODS
+          
+          # Copy built site to OODS subdirectory
+          cp -r site/dist target-repo/OODS
+          
+          # Configure git
+          cd target-repo
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          
+          # Commit and push changes
+          git add OODS
+          git diff --staged --quiet || git commit -m "Deploy OODS site (automated)"
+          git push origin main
+
+      - name: Deployment complete
+        run: echo "Site deployed to https://ciang-ks.github.io/OODS/"

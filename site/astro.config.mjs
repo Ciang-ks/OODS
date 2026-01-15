@@ -4,7 +4,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://ood-seminar.github.io', // Placeholder, user can update
+  site: 'https://ciang-ks.github.io',
   base: '/OODS',
   integrations: [tailwind(), react()],
   markdown: {
