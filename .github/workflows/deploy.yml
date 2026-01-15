@@ -43,10 +43,11 @@ jobs:
       - name: Deploy to OODS subdirectory
         run: |
           # Remove old OODS directory if exists
-          rm -rf target-repo/OODS
+          rm -rf target-repo/public/OODS
           
-          # Copy built site to OODS subdirectory
-          cp -r site/dist target-repo/OODS
+          # Copy built site to public/OODS subdirectory
+          mkdir -p target-repo/public
+          cp -r site/dist target-repo/public/OODS
           
           # Configure git
           cd target-repo
@@ -54,7 +55,7 @@ jobs:
           git config user.email "actions@github.com"
           
           # Commit and push changes
-          git add OODS
+          git add public/OODS
           git diff --staged --quiet || git commit -m "Deploy OODS site (automated)"
           git push origin main
 
