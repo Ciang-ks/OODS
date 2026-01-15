@@ -1,3 +1,10 @@
+---
+title: "视觉计算和机器人学中的数据驱动方法"
+type: report
+author: ["王偲哲", "王轩禹"]
+id: ["2500017779", "2500017770"]
+---
+
 ## 一、课程概述
 
 本课程由北京大学穆亚东老师主讲，系统介绍了计算机视觉与机器人学中基于数据驱动的方法。内容涵盖从早期的视觉表示理论，到经典的视觉词袋模型，再到以深度学习为代表的现代表示学习方法，最后延伸至生成模型与机器人应用，构建了一个完整的知识体系。
@@ -146,10 +153,23 @@
 
 ---
 
-# AI 协作记录
+## 引用
+[^1]:https://en.wikipedia.org/wiki/Semantic_gap
+[^2]:https://en.wikipedia.org/wiki/Bag-of-words_model_in_computer_vision
+[^3]:https://en.wikipedia.org/wiki/Harris_corner_detector
+[^4]:https://en.wikipedia.org/wiki/Inception_(deep_learning_architecture)\
+[^5]:https://medium.com/data-science/what-is-residual-connection-efb07cab0d55
+[^6]:https://en.wikipedia.org/wiki/Vanishing_gradient_problem
 
-## 1. prompt: 基于数据驱动方法的视觉识别已经发展到一定高度了，但机器人学中完成具体现实任务如叠衣服仍然存在很大的困难，这种隔阂主要由何引起，以及需要在什么方面继续发展才能让机器完成更加贴近人类生活中的任务？
+---
 
+## AI协作记录
+<div style="font-size: small;">
+
+**Prompt 1:**
+基于数据驱动方法的视觉识别已经发展到一定高度了，但机器人学中完成具体现实任务如叠衣服仍然存在很大的困难，这种隔阂主要由何引起，以及需要在什么方面继续发展才能让机器完成更加贴近人类生活中的任务？
+
+**Answer:**
 Google Gemini:
 您提出的问题非常深刻，它指出了当前**数据驱动的视觉识别（Vision）**和**现实世界机器人操作（Robotics）**之间存在的关键“隔阂”（Gap）。
 
@@ -225,8 +245,10 @@ Google Gemini:
 
 ---
 
-## 2. prompt: 基于数据驱动方法的视觉识别已经发展到一定高度了，但机器人学中完成具体现实任务如叠衣服仍然存在很大的困难，这种隔阂主要由何引起，以及需要在什么方面继续发展才能让机器完成更加贴近人类生活中的任务？
+**Prompt 2:**
+基于数据驱动方法的视觉识别已经发展到一定高度了，但机器人学中完成具体现实任务如叠衣服仍然存在很大的困难，这种隔阂主要由何引起，以及需要在什么方面继续发展才能让机器完成更加贴近人类生活中的任务？
 
+**Answer:**
 Google Gemini:
 
 您提出的问题涉及深度学习优化中的两个核心挑战：**梯度消失/爆炸**和**网络退化**，以及 ResNet 如何巧妙地通过残差连接（Residual Connection）来克服它们。
@@ -293,12 +315,4 @@ ResNet 的基础是**残差块**。它不是让堆叠的层（例如 $L$ 层）�
 
 **总结：** 残差连接通过改变网络的**映射目标**（从学习 $H(x)$ 到学习 $F(x)$），巧妙地将优化问题转化为更简单的**拟合残差**问题，并通过**跳跃连接**提供了梯度回传的保障，从而开启了深度学习的“千层”时代。
 
----
-
-## 引用
-[^1]:https://en.wikipedia.org/wiki/Semantic_gap
-[^2]:https://en.wikipedia.org/wiki/Bag-of-words_model_in_computer_vision
-[^3]:https://en.wikipedia.org/wiki/Harris_corner_detector
-[^4]:https://en.wikipedia.org/wiki/Inception_(deep_learning_architecture)\
-[^5]:https://medium.com/data-science/what-is-residual-connection-efb07cab0d55
-[^6]:https://en.wikipedia.org/wiki/Vanishing_gradient_problem
+</div>
