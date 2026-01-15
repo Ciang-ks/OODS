@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { heroImages } from '../utils/heroImages';
+
+const homeworks = await getCollection('homeworks');
+// Sort by ID or Title? Let's sort by ID for consistency if numeric-ish.
+homeworks.sort((a, b) => a.data.id.localeCompare(b.data.id));
+
+const baseUrl = import.meta.env.BASE_URL;
+
+---
+
+<Layout title="OODS Homeworks">
+	<div class="mb-20 mt-8">
+        <div class="flex items-center gap-3 mb-6">
+            <svg class="w-8 h-8 text-slate-900" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+		    <h1 class="text-4xl font-bold tracking-tight text-slate-900">
+			    数据科学面面观
+		    </h1>
+        </div>
+		<p class="text-xl text-slate-600 max-w-2xl leading-relaxed serif mb-8">
+            《数据科学面面观》为北京大学元培学院数据科学方向新生讨论课，旨在引导同学系统了解数据科学的核心概念、常用方法与典型应用。
+            本页面汇集本学期课程作业与报告，供课程学习交流与后续学习参考。
+            <br/><span class="text-sm text-slate-400 mt-2 block font-sans">北京大学 · 2025 年秋季学期</span>
+		</p>
+        
+        <div class="mb-12 pt-6 border-t border-slate-200/60">
+             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Contributors</h3>
+             <a href="https://github.com/Ciang-ks/OODS/graphs/contributors" class="inline-block opacity-80 hover:opacity-100 transition-opacity">
+                <img src="https://contrib.rocks/image?repo=Ciang-ks/OODS" alt="Contributors" />
+             </a>
+        </div>
+	</div>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+		{homeworks.map((work) => (
+			<a href={`${baseUrl.replace(/\/$/, '')}/${work.slug}/`} 
+               class="group relative flex flex-col bg-white border border-slate-200 hover:border-indigo-400/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/5">
+				
+                <!-- Hero Image -->
+                <div class="h-48 bg-slate-100 border-b border-slate-100 group-hover:bg-slate-50 transition-colors relative overflow-hidden flex items-center justify-center">
+                    {heroImages[work.slug] ? (
+                        <img 
+                            src={`${baseUrl.replace(/\/$/, '')}/${heroImages[work.slug]}`} 
+                            alt={work.data.title} 
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                    ) : (
+                         <span class="text-slate-300 font-mono text-sm group-hover:text-indigo-200 transition-colors">Visualization</span>
+                    )}
+                </div>
+
+                <div class="p-6 flex flex-col flex-1">
+                    <div class="flex items-center justify-between gap-3 mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{work.data.type || 'Report'}</span>
+                    </div>
+                    
+                    <h2 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors text-balance leading-tight">
+                        {work.data.title}
+                    </h2>
+                    
+                    <div class="mt-auto pt-6 flex flex-wrap gap-2">
+                         {work.data.author.map(author => (
+                            <span class="text-xs font-medium text-slate-500 bg-slate-50 px-2 py-1 rounded border border-slate-100">
+                                {author}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+			</a>
+		))}
+	</div>
+</Layout>

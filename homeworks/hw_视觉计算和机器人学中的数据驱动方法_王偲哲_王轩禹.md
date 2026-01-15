@@ -146,14 +146,6 @@ id: ["2500017779", "2500017770"]
 ## 十、总结
 本课程系统性地梳理了计算机视觉与机器人学中的数据驱动方法，从传统视觉词袋模型到现代深度学习与生成模型，展现了技术演进的脉络。课程不仅覆盖理论基础与核心技术，还强调实际应用与伦理思考，为学习者构建了完整的知识体系与研究视角。
 
----
-
-讲师联系方式：穆亚东 myd@pku.edu.cn
-课程网站：http://www.muyadong.com
-
----
-
-## 引用
 [^1]:https://en.wikipedia.org/wiki/Semantic_gap
 [^2]:https://en.wikipedia.org/wiki/Bag-of-words_model_in_computer_vision
 [^3]:https://en.wikipedia.org/wiki/Harris_corner_detector

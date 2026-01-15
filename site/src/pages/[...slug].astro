@@ -1,0 +1,225 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { heroImages } from "../utils/heroImages";
+
+export async function getStaticPaths() {
+    const homeworks = await getCollection("homeworks");
+    return homeworks.map((entry) => ({
+        params: { slug: entry.slug },
+        props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const baseUrl = import.meta.env.BASE_URL;
+const heroImage =
+    heroImages[entry.slug] || heroImages[entry.slug.toLowerCase()];
+---
+
+<Layout title={entry.data.title}>
+    <article class="max-w-none">
+        <header
+            class="mb-16 pb-12 border-b border-slate-200 relative -mx-6 px-6 py-16 md:py-24 overflow-hidden"
+            style={heroImage
+                ? `background-image: url('${baseUrl.replace(/\/$/, "")}/${heroImage}'); background-size: cover; background-position: center;`
+                : ""}
+        >
+            {
+                heroImage && (
+                    <div class="absolute inset-0 bg-gradient-to-b from-white/90 via-white/85 to-white/95 backdrop-blur-[2px]" />
+                )
+            }
+
+            <div class="relative z-10">
+                <div
+                    class="flex flex-wrap items-center gap-3 text-sm mb-6 font-mono"
+                >
+                    <span
+                        class={`uppercase tracking-wider text-xs font-semibold ${heroImage ? "text-slate-600" : "text-slate-500"}`}
+                        >{entry.data.type || "Report"}</span
+                    >
+                </div>
+
+                <h1
+                    class={`text-4xl md:text-5xl font-extrabold mb-8 leading-tight tracking-tight text-balance ${heroImage ? "text-slate-900" : "text-slate-900"}`}
+                >
+                    {entry.data.title}
+                </h1>
+
+                <div class="flex flex-wrap gap-4">
+                    {
+                        entry.data.author.map((author: string) => (
+                            <div class="flex items-center gap-3 bg-white/90 backdrop-blur-sm pr-4 pl-2 py-2 rounded-full border border-slate-200 shadow-sm">
+                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600 border border-slate-200">
+                                    {author[0]}
+                                </div>
+                                <span class="text-base font-medium text-slate-700">
+                                    {author}
+                                </span>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </header>
+
+        <div
+            class="content-body relative markdown-body"
+            style="background-color: transparent;"
+        >
+            <Content />
+        </div>
+    </article>
+
+    <script>
+        // Collapsible AI Records script with Chat Styling
+        function collapseAIRecords() {
+            const articleBody = document.querySelector(".content-body");
+            if (!articleBody) return;
+
+            // Find all H2s to locate specific sections
+            const headers = articleBody.querySelectorAll("h2");
+
+            headers.forEach((h2) => {
+                const text = h2.textContent || "";
+                // Flexible matching for English/Chinese variants of "AI Collaboration Record"
+                if (
+                    text.includes("AI协作") ||
+                    text.includes("AI Collaboration") ||
+                    text.toLowerCase().includes("ai record")
+                ) {
+                    // 1. Create the container structure
+                    const details = document.createElement("details");
+                    details.className =
+                        "group my-12 bg-slate-50 border border-slate-200 rounded-lg overflow-hidden transition-all duration-300 open:shadow-md";
+
+                    const summary = document.createElement("summary");
+                    summary.className =
+                        "flex items-center justify-between p-5 cursor-pointer hover:bg-slate-100 transition-colors select-none list-none [&::-webkit-details-marker]:hidden";
+                    summary.innerHTML = `
+                         <div class="flex items-center gap-4 text-slate-700 font-semibold text-lg">
+                            <span class="p-2 rounded-lg bg-white border border-slate-200 text-slate-600 group-hover:text-slate-900 transition-colors shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="m12 12 7.07 7.07"/><path d="M12 12v9"/></svg>
+                            </span>
+                            <span>AI 协作记录 / Collaboration Log</span>
+                        </div>
+                        <span class="text-slate-400 transition-transform duration-300 group-open:rotate-180 bg-white border border-slate-200 p-1 rounded-md shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </span>
+                    `;
+
+                    const content = document.createElement("div");
+                    content.className =
+                        "p-6 md:p-8 space-y-6 pt-2 text-base text-slate-700 border-t border-slate-200 bg-white";
+
+                    // Insert wrapper before the original header
+                    h2.parentNode?.insertBefore(details, h2);
+                    details.appendChild(summary);
+                    details.appendChild(content);
+
+                    // 2. Move content into the details block
+                    // We move everything after the header until the end of the container or next H2 (though usually it's at the end)
+                    let next = details.nextSibling;
+                    // Skip the original h2 which is now after details (since we inserted before)
+                    // Wait, we inserted details BEFORE h2. So h2 is nextSibling.
+                    // Actually, let's remove H2 first or verify logic.
+                    // Current DOM: ... -> details -> h2 -> p -> p ...
+
+                    // We want to consume h2 (delete it) and move p, p... into content.
+
+                    // Remove the header we found
+                    h2.remove();
+
+                    // Now move siblings until we hit end or another H1/H2?
+                    // Usually AI records are the last section. Let's consume until end for safety in this specific context,
+                    // or until next heading if we want to be safer.
+                    next = details.nextSibling;
+
+                    while (next) {
+                        const currentNode = next;
+                        next = currentNode.nextSibling; // Advance pointer before moving
+
+                        // Check if this is the footnotes section
+                        if (
+                            currentNode.nodeType === 1 &&
+                            currentNode.classList.contains("footnotes")
+                        ) {
+                            // Move footnotes before the details block
+                            details.parentNode?.insertBefore(
+                                currentNode,
+                                details,
+                            );
+                            continue;
+                        }
+
+                        // Stop if we hit another major section (H1/H2) - unlikely but good practice
+                        if (
+                            currentNode.nodeName === "H1" ||
+                            currentNode.nodeName === "H2"
+                        ) {
+                            // Put it back? or just stop?
+                            // If we stop, we leave the loop.
+                            // But for now, assuming AI record is at the end.
+                            const nextHeader = currentNode.textContent;
+                            if (nextHeader && !nextHeader.includes("Prompt")) {
+                                // Just a sanity check if it's not a prompt header
+                                break;
+                            }
+                        }
+
+                        // Move node
+                        content.appendChild(currentNode);
+                    }
+
+                    // 3. Process Content for "Chat Interface" Look
+                    const children = Array.from(content.children);
+                    children.forEach((child) => {
+                        // Check for Prompt/Answer patterns in Paragraphs
+                        if (child.tagName === "P") {
+                            const html = child.innerHTML.trim();
+                            const text = child.textContent?.trim() || "";
+
+                            // Check for Strong tags at start
+                            const isPrompt =
+                                html.startsWith("<strong>Prompt") ||
+                                html.startsWith("<strong>Q") ||
+                                text.startsWith("Prompt") ||
+                                text.startsWith("Q");
+                            const isAnswer =
+                                html.startsWith("<strong>Answer") ||
+                                text.startsWith("Answer");
+
+                            if (isPrompt) {
+                                child.className =
+                                    "bg-slate-100 border border-slate-200 p-4 md:p-5 rounded-2xl rounded-tl-sm ml-0 mr-8 md:mr-16 mb-4";
+                                // Highlight the label
+                                child.innerHTML = child.innerHTML.replace(
+                                    /<strong>(.*?):?<\/strong>/,
+                                    '<div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">$1</div>',
+                                );
+                            } else if (isAnswer) {
+                                child.className =
+                                    "bg-indigo-50 border border-indigo-100 p-4 md:p-5 rounded-2xl rounded-tr-sm ml-8 md:ml-16 mr-0 mb-6";
+                                // Highlight the label
+                                child.innerHTML = child.innerHTML.replace(
+                                    /<strong>(.*?):?<\/strong>/,
+                                    '<div class="text-indigo-600 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> $1</div>',
+                                );
+                            }
+                        }
+                        // Handle Lists or other elements that might follow a prompt/answer
+                        if (child.tagName === "UL" || child.tagName === "OL") {
+                            child.classList.add("ml-8", "md:ml-20", "mb-6");
+                        }
+                    });
+                }
+            });
+        }
+
+        // Run on load and on view transition
+        collapseAIRecords();
+        document.addEventListener("astro:page-load", collapseAIRecords);
+    </script>
+</Layout>
